@@ -38,6 +38,16 @@
                 "category": "Media Player"
             },
             {
+                "command": "extension.mediaPlayer.insertTimestamp",
+                "title": "Insert timestamp",
+                "category": "Media Player"
+            },
+            {
+                "command": "extension.mediaPlayer.jumpToTimestamp",
+                "title": "Jump to timestamp",
+                "category": "Media Player"
+            },
+            {
                 "command": "extension.mediaPlayer.selectPlayerOutput",
                 "title": "Select output",
                 "category": "Media Player"
