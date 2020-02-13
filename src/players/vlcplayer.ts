@@ -829,7 +829,7 @@ export class VLCPlayer extends Events.EventEmitter implements mplayer_contracts.
                     const OPTS: HTTP.RequestOptions = {
                         headers: HEADERS,
                         host: BASE_URL.hostname,
-                        path: '/requests/status.xml?command=' + encodeURIComponent('pl_next'),
+                        path: '/requests/status.xml?command=seek&val=+3',
                         port: parseInt(BASE_URL.port),
                         method: 'GET',
                     };
@@ -974,7 +974,7 @@ export class VLCPlayer extends Events.EventEmitter implements mplayer_contracts.
                     const OPTS: HTTP.RequestOptions = {
                         headers: HEADERS,
                         host: BASE_URL.hostname,
-                        path: '/requests/status.xml?command=' + encodeURIComponent('pl_previous'),
+                        path: '/requests/status.xml?command=seek&val=-3',
                         port: parseInt(BASE_URL.port),
                         method: 'GET',
                     };
