@@ -66,6 +66,53 @@ interface TrackQuickPickItem extends vscode.QuickPickItem {
  * The controller class for that extension.
  */
 export class MediaPlayerController extends Events.EventEmitter implements vscode.Disposable {
+    jumpToTimestamp() {
+        const ME = this;
+        const CONNECTED_PLAYERS = ME._connectedPlayers.filter(x => x &&
+            mplayer_helpers.toBooleanSafe(x.player.isConnected));
+        if(CONNECTED_PLAYERS){
+            const currentPlayers = CONNECTED_PLAYERS.map<mplayer_contracts.MediaPlayer>((statusBarController)=>{return statusBarController.player;});
+            if(currentPlayers.length==1){
+                const player = currentPlayers[0];
+                const selected = vscode.window.activeTextEditor.selection;
+                const selectedText = vscode.window.activeTextEditor.document.getText(selected);
+                if(selectedText){
+                    const matches = selectedText.match(/[\d\d?:]+\d\d?:\d\d?/g);
+                    if(matches && matches.length>0){
+                        // Got the timestamp
+                        const timestamp = matches[0];
+                        // turn it into seconds 
+                        const timeArr = timestamp.split(":");
+                        var seconds = 0;
+                        for(var i = timeArr.length-1, j=0; i>=0; i--, j++){
+                            seconds += parseInt(timeArr[i]) * Math.pow(60, j);
+                        }
+                        //seek to time 
+                        player.seek(seconds);                        
+                    }
+                }
+            }
+        }
+    }
+
+    insertTimestamp() {
+        const ME = this;
+        const CONNECTED_PLAYERS = ME._connectedPlayers.filter(x => x &&
+            mplayer_helpers.toBooleanSafe(x.player.isConnected));
+        if(CONNECTED_PLAYERS){
+            const currentTimes = CONNECTED_PLAYERS.map<number>((statusBarController)=>{return statusBarController.player.currentTrack.time;});
+            if(currentTimes.length==1){
+                var seconds = currentTimes[0];
+                var timestamp = mplayer_helpers.secondsToTimestamp(seconds);
+                const editor = vscode.window.activeTextEditor;
+                const position = editor.selection.active;
+                const insertEdit = vscode.TextEdit.insert(position, "["+timestamp+"]");
+                editor.edit(
+                    editBuilder => {editBuilder.insert(position, "["+timestamp+"]")}
+                    );
+            }
+        }
+    }
     /**
      * Stores the current configuration.
      */
