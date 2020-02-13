@@ -162,6 +162,12 @@ export interface MediaPlayer extends NodeJS.EventEmitter, vscode.Disposable {
      */
     readonly prev: () => PromiseLike<boolean>;
     /**
+     * Seeks for a position in the current track.
+     * 
+     * @return {PromiseLike<boolean>} The promise which indicates if operation was successful or not.
+     */
+    seek(sec : number): Promise<boolean>;
+    /**
      * Searches for playlists.
      * 
      * @param {string} [expr] The search expression.
@@ -209,6 +215,11 @@ export interface MediaPlayer extends NodeJS.EventEmitter, vscode.Disposable {
      * @return {PromiseLike<boolean>} The promise which indicates if operation was successful or not.
      */
     readonly volumeUp: () => PromiseLike<boolean>;
+
+    /**
+     * The {Track} that is currently playing, if any
+     */
+    currentTrack: Track;
 }
 
 /**
@@ -358,6 +369,10 @@ export interface PlayerStatus {
      * The current volumn (0 = 0%, 1.0 = 100%)
      */
     readonly volume?: number;
+    /**
+     * The current time in seconds.
+     */
+    readonly time?: number;
 }
 
 /**
@@ -517,6 +532,11 @@ export interface Track {
      * Gets the underlying playlist.
      */
     readonly playlist: Playlist;
+
+    /**
+     * The current time of the track in seconds
+     */
+    time: number;
 }
 
 /**
