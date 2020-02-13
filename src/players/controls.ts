@@ -87,7 +87,7 @@ export class StatusBarController implements vscode.Disposable {
     public get config(): mplayer_contracts.PlayerConfig {
         return this._CONFIG;
     }
-
+    
     /**
      * Gets the underlying extension context.
      */
@@ -220,7 +220,7 @@ export class StatusBarController implements vscode.Disposable {
                         try {
                             btn.command = undefined;
 
-                            progress.message = 'Selecting PREVIOUS track...';
+                            progress.message = 'Jumping backwards...';
                             await ME.player.prev();
                         }
                         catch (e) {
@@ -235,7 +235,7 @@ export class StatusBarController implements vscode.Disposable {
                 NEW_ITEMS.push(btn = vscode.window.createStatusBarItem(alignment, GET_PRIORITY(1)));
                 btn.command = CMD_PREV;
                 btn.text = '$(chevron-left)';
-                btn.tooltip = 'PREVIOUS track';
+                btn.tooltip = 'Small jump backwards';
                 SET_BUTTON_VISIBILITY(btn, mplayer_helpers.toBooleanSafe( ME.config.showPrevButton, true ));
             }
 
@@ -288,7 +288,7 @@ export class StatusBarController implements vscode.Disposable {
                         try {
                             btn.command = undefined;
 
-                            progress.message = 'Selecting NEXT track...';
+                            progress.message = 'Jumping forward...';
                             await ME.player.next();
                         }
                         catch (e) {
@@ -303,7 +303,7 @@ export class StatusBarController implements vscode.Disposable {
                 NEW_ITEMS.push(btn = vscode.window.createStatusBarItem(alignment, GET_PRIORITY(3)));
                 btn.command = CMD_NEXT;
                 btn.text = '$(chevron-right)';
-                btn.tooltip = 'NEXT track';
+                btn.tooltip = 'Small jump forward';
                 SET_BUTTON_VISIBILITY(btn, mplayer_helpers.toBooleanSafe( ME.config.showNextButton, true ));
             }
 
@@ -566,7 +566,9 @@ export class StatusBarController implements vscode.Disposable {
                         }
 
                         if (track) {
-                            trackButtonText = mplayer_helpers.toStringSafe(STATUS.track.name).trim();
+                            this.player.currentTrack = track;
+                            track.time = STATUS.time;
+                            trackButtonText = mplayer_helpers.toStringSafe(STATUS.track.name+" "+mplayer_helpers.secondsToTimestamp(track.time)).trim();
                         }
 
                         if (!mplayer_helpers.isNullOrUndefined(STATUS.isMute)) {
