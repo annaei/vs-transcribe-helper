@@ -82,6 +82,16 @@ export function activate(context: vscode.ExtensionContext) {
         await controller.executePlayerAction();
     });
 
+    // insert timestamp
+    const CMD_INSERT_TIMESTAMP = vscode.commands.registerCommand('extension.mediaPlayer.insertTimestamp', async () => {
+        await controller.insertTimestamp();
+    });
+
+    // jump to timestamp
+    const CMD_JUMP_TO_TIMESTAMP = vscode.commands.registerCommand('extension.mediaPlayer.jumpToTimestamp', async () => {
+        await controller.jumpToTimestamp();
+    });
+
     // select item of playlist
     const CMD_SELECT_ITEM_OF_PLAYLIST = vscode.commands.registerCommand('extension.mediaPlayer.selectItemOfPlaylist', async () => {
         await controller.selectItemOfPlaylist();
