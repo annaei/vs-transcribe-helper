@@ -1,9 +1,9 @@
 {
-    "name": "vs-media-player",
-    "displayName": "Media Player",
-    "description": "Extension to control media players like Spotify or VLC directly from the editor.",
-    "version": "3.1.0",
-    "publisher": "mkloubert",
+    "name": "vs-transcribe-helper",
+    "displayName": "Transcribe Helper",
+    "description": "Extension to control VLC directly from the editor for transcribing purposes.",
+    "version": "3.2.0",
+    "publisher": "annaei",
     "engines": {
         "vscode": "^1.19.0"
     },
@@ -12,10 +12,8 @@
         "Other"
     ],
     "keywords": [
-        "Media",
-        "Music",
         "Player",
-        "Spotify",
+        "Media",
         "VLC"
     ],
     "activationEvents": [
@@ -325,18 +323,18 @@
         "@types/xml2js": "^0.4.2",
         "mocha": "^2.3.3",
         "typescript": "^2.7.2",
-        "vscode": "^1.1.10"
+        "vscode": "^1.1.36"
     },
     "icon": "icon.png",
     "author": {
-        "name": "Marcel Joachim Kloubert"
+        "name": "Marcel Joachim Kloubert & Anna Eilertsen"
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/mkloubert/vs-media-player"
+        "url": "https://github.com/annaei/vs-transcribe-helper"
     },
     "bugs": {
-        "url": "https://github.com/mkloubert/vs-media-player/issues"
+        "url": "https://github.com/annaei/vs-transcribe-helper/issues"
     },
     "readmeFilename": "README.md",
     "dependencies": {
