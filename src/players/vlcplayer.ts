@@ -41,6 +41,8 @@ type TrackListProvider = () => PromiseLike<mplayer_contracts.Track[]>;
  * A VLC player.
  */
 export class VLCPlayer extends Events.EventEmitter implements mplayer_contracts.MediaPlayer {
+
+    currentTrack: mplayer_contracts.Track;
     /**
      * Stores the underlying configuration.
      */
@@ -103,6 +105,7 @@ export class VLCPlayer extends Events.EventEmitter implements mplayer_contracts.
 
         return URL.parse(`${scheme}://${'' !== PWD ? (':' + PWD + '@') : ''}${host}:${port}/`);
     }
+    
 
     /** @inheritdoc */
     public connect() {
@@ -337,6 +340,7 @@ export class VLCPlayer extends Events.EventEmitter implements mplayer_contracts.
                                                                             name: name,
                                                                             play: undefined,
                                                                             playlist: playlist,
+                                                                            time : 0,
                                                                         };
 
                                                                         (<any>NEW_TRACK)['play'] = ME.createPlayer(id);
@@ -585,6 +589,7 @@ export class VLCPlayer extends Events.EventEmitter implements mplayer_contracts.
                                                     isConnected: undefined,
                                                     player: ME,
                                                     state: mplayer_contracts.State.Stopped,
+                                                    time: undefined,
                                                 };
 
                                                 // STATUS.isConnected
@@ -655,6 +660,14 @@ export class VLCPlayer extends Events.EventEmitter implements mplayer_contracts.
                                                             vol = vol / 256.0;  // 256 => 100%
 
                                                             (<any>STATUS)['volume'] = vol;
+                                                        }
+                                                    });
+
+                                                     // time
+                                                    mplayer_helpers.asArray(xml['root']['time']).filter(x => x).forEach(x => {
+                                                        let time = parseInt( mplayer_helpers.toStringSafe(x).trim() );
+                                                        if (!isNaN(time)) {
+                                                            (<any>STATUS)['time'] = time;
                                                         }
                                                     });
 
@@ -1009,6 +1022,66 @@ export class VLCPlayer extends Events.EventEmitter implements mplayer_contracts.
             }
         });
     }
+
+    /** @inheritdoc */
+    public seek(sec : number): Promise<boolean> {
+        const ME = this;
+
+        return new Promise<boolean>((resolve, reject) => {
+            const COMPLETED = ME.createCompletedAction(resolve, reject);
+
+            try {
+                try {
+                    const BASE_URL = ME.baseURL;
+
+                    const HEADERS: any = {};
+
+                    const AUTH = mplayer_helpers.toStringSafe(BASE_URL.auth);
+                    if (AUTH.indexOf(':') > -1) {
+                        const PARTS = AUTH.split(':');
+
+                        HEADERS['Authorization'] = `Basic ${new Buffer(AUTH, 'ascii').toString('base64')}`;
+                    }
+                    
+                    const OPTS: HTTP.RequestOptions = {
+                        headers: HEADERS,
+                        host: BASE_URL.hostname,
+                        path: '/requests/status.xml?command=seek&val='+sec,
+                        port: parseInt(BASE_URL.port),
+                        method: 'GET',
+                    };
+
+                    const REQUEST = HTTP.request(OPTS, (resp) => {
+                        try {
+                            switch (resp.statusCode) {
+                                case 200:
+                                    COMPLETED(null, true);
+                                    break;
+
+                                default:
+                                    COMPLETED(`Unexpected status code: ${resp.statusCode}`);
+                                    break;
+                            }
+                        }
+                        catch (e) {
+                            COMPLETED(e);
+                        }
+                    });
+
+                    mplayer_helpers.registerSafeHttpRequestErrorHandlerForCompletedAction(REQUEST, COMPLETED);
+
+                    REQUEST.end();
+                }
+                catch (e) {
+                    COMPLETED(e);
+                }
+            }
+            catch (e) {
+                COMPLETED(e);
+            }
+        });
+    }
+
 
     /** @inheritdoc */
     public searchPlaylists(expr?: string): Promise<mplayer_contracts.PlaylistSearchResult> {
