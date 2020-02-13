@@ -620,3 +620,29 @@ export function withProgress<TResult = void, TState = undefined>(task: (ctx: Pro
         });
     });
 }
+
+
+/**
+ * Converts a number second value to a string on the format HH:MM:SS
+ * 
+ * @param {number} [seconds] the seconds to be used for the timestamp
+ * 
+ * @return {string} The timestamp
+ */
+export function secondsToTimestamp(seconds : number) : String{
+        var timestamp = "" + seconds % 60;
+        if(timestamp.length<2){
+            timestamp = "0"+timestamp;
+        }
+        seconds -= seconds % 60;
+        const minutes = Math.floor(seconds/(60));
+        timestamp=minutes%60+":"+timestamp;
+        if(timestamp.length<5){
+            timestamp = "0"+timestamp;
+        }
+        if(minutes/(60)>=1){
+            const hours = Math.floor(minutes/(60));
+            timestamp=hours+":"+timestamp;
+    }
+    return timestamp;
+}
