@@ -1,36 +1,17 @@
-# vs-media-player
+# vs-transcribe-helper
 
-[![Latest Release](https://vsmarketplacebadge.apphb.com/version-short/mkloubert.vs-media-player.svg)](https://marketplace.visualstudio.com/items?itemName=mkloubert.vs-media-player)
-[![Installs](https://vsmarketplacebadge.apphb.com/installs/mkloubert.vs-media-player.svg)](https://marketplace.visualstudio.com/items?itemName=mkloubert.vs-media-player)
-[![Rating](https://vsmarketplacebadge.apphb.com/rating-short/mkloubert.vs-media-player.svg)](https://marketplace.visualstudio.com/items?itemName=mkloubert.vs-media-player#review-details)
-
-[Visual Studio Code](https://code.visualstudio.com/) (VSCode) extension to control media players like [Spotify](https://developer.spotify.com/) or [VLC](https://www.videolan.org/vlc/) directly from the editor.
-
-![Demo 1 Spotify](https://raw.githubusercontent.com/mkloubert/vs-media-player/master/img/demo1.gif)
-
-[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=ZJ4HXH733Y9S8) [![](https://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?fid=o62pkd&url=https%3A%2F%2Fgithub.com%2Fmkloubert%2Fvs-media-player)
+Docs are out of date. This project is becoming a transcription extension for VS Code that lets you control VLC in ways that are useful when transcribing.
 
 ## Table of contents
 
 1. [Install](#install-)
 2. [How to use](#how-to-use-)
-   * [Spotify](#spotify-)
-     * [Web API](#web-api-)
    * [VLC](#vlc-)
    * [Commands](#commands-)
      * [Shortcuts](#shortcuts-)
 
 ## Install [[&uarr;](#table-of-contents)]
-
-Launch VS Code Quick Open (Ctrl+P), paste the following command, and press enter:
-
-```bash
-ext install vs-media-player
-```
-
-Or search for things like `vs-media-player` in your editor:
-
-![Start Spotify OAuth](https://raw.githubusercontent.com/mkloubert/vs-media-player/master/img/screenshot1.png)
+Install from VSIX. 
 
 ## How to use [[&uarr;](#table-of-contents)]
 
@@ -78,102 +59,6 @@ A player entry supports the following, common properties:
 | `showTrackSelectorButton` | Show button for selecting a track in status bar or not. Default `(true)` |
 | `showVolumeButtons` | Show buttons to change volume in status bar or not. Default `(false)` |
 | `type` | The type. |
-
-### Spotify [[&uarr;](#how-to-use-)]
-
-```json
-{
-    "media.player": {
-        "players": [
-            {
-                "name": "My Spotify player",
-                "type": "spotify"
-            }
-        ]
-    }
-}
-```
-
-| Feature | Supported by [spotilocal](https://www.npmjs.com/package/spotilocal) | Supported by [Web API](#web-api-) |
-| ---- |:--:|:--:|
-| Load playlists | &nbsp; | X |
-| Mute volume |  | X |
-| Pause | X | X |
-| Play | X | X |
-| Play next track |  | X |
-| Play previous track |  | X |
-| Play track |  | X |
-| Search for playlists |  | X |
-| Search for tracks |  | X |
-| Select output |  | X |
-| Toggle repeating | (only state is displayed) | X |
-| Toggle shuffle | (only state is displayed) | X |
-| Volume down |  | X |
-| Volume up |  | X |
-
-To extend the basic features provided by [spotilocal](https://www.npmjs.com/package/spotilocal) module, take a look at the [Web API](#web-api-) section to get to known how to setup the extension for OAuth.
-
-#### Web API [[&uarr;](#spotify-)]
-
-First of all, you have to register an app [here](https://developer.spotify.com/my-applications/#!/applications/create):
-
-<kbd>![Register app in Spotify](https://raw.githubusercontent.com/mkloubert/vs-media-player/master/img/spotify1.png)</kbd>
-
-After you have added the app, you need to select and edit it (`My Applications` on the upper left side):
-
-<kbd>![Edit registrated app](https://raw.githubusercontent.com/mkloubert/vs-media-player/master/img/spotify2.png)</kbd>
-
-Define a redirect URI that does really exist and can delegate to the PC, where your VS Code is running.
-The easiest way to use, is `localhost`, like `http://localhost`.
-
-What happens is, that, when you start authorizing, your browser is open with a Spotify address, where you are asked, if your account wants to be connected with the app, you have registered:
-
-<kbd>![Spotify OAuth page](https://raw.githubusercontent.com/mkloubert/vs-media-player/master/img/spotify3.png)</kbd>
-
-The extension will request for the following [scopes / permissions](https://developer.spotify.com/web-api/using-scopes/):
-
-* `playlist-read-collaborative`
-* `playlist-read-private`
-* `streaming`
-* `user-library-read`
-* `user-read-playback-state`
-
-At the same time a HTTP server is started from VS Code on your local machine, that will wait for Spotify, which will connect to that server, when you click on `OK`.
-
-Spotify will send an OAuth code to that server, that makes it possible to extend the feature list with the help of [Web API](https://developer.spotify.com/web-api/):
-
-<kbd>![OAuth code received from Spotify](https://raw.githubusercontent.com/mkloubert/vs-media-player/master/img/spotify4.png)</kbd>
-
-Now copy all app data to your `media.player` settings in VS Code:
-
-```json
-{
-    "media.player": {
-        "players": [
-            {
-                "name": "My Spotify player",
-                "type": "spotify",
-
-                "clientID": "<Client ID>",
-                "clientSecret": "<Client Secret>",
-                "redirectURL": "<Redirect URI>"
-            }
-        ]
-    }
-}
-```
-
-An entry supports the following, additional settings:
-
-| Name | Description |
-| ---- | --------- |
-| `clientID` | The client ID of an own registered Spotify app. |
-| `clientSecret` | The client secret of an own registered Spotify app. |
-| `redirectURL` | The redirect URL for the authorization. |
-
-To start the authorization process, click on the following, yellow button in your status bar:
-
-<kbd>![Start Spotify OAuth](https://raw.githubusercontent.com/mkloubert/vs-media-player/master/img/spotify5.png)</kbd>
 
 ### VLC [[&uarr;](#how-to-use-)]
 
