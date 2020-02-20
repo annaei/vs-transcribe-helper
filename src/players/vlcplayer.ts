@@ -590,6 +590,7 @@ export class VLCPlayer extends Events.EventEmitter implements mplayer_contracts.
                                                     player: ME,
                                                     state: mplayer_contracts.State.Stopped,
                                                     time: undefined,
+                                                    length: undefined, 
                                                 };
 
                                                 // STATUS.isConnected
@@ -668,6 +669,14 @@ export class VLCPlayer extends Events.EventEmitter implements mplayer_contracts.
                                                         let time = parseInt( mplayer_helpers.toStringSafe(x).trim() );
                                                         if (!isNaN(time)) {
                                                             (<any>STATUS)['time'] = time;
+                                                        }
+                                                    });
+
+                                                     // length
+                                                     mplayer_helpers.asArray(xml['root']['length']).filter(x => x).forEach(x => {
+                                                        let length = parseInt( mplayer_helpers.toStringSafe(x).trim() );
+                                                        if (!isNaN(length)) {
+                                                            (<any>STATUS)['length'] = length;
                                                         }
                                                     });
 

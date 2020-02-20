@@ -334,6 +334,10 @@ export interface PlayerConfig {
  */
 export interface PlayerStatus {
     /**
+     * the length that should be shown on the statusbar, typically the track length
+     */
+    readonly length: number;
+    /**
      * Info button.
      */
     readonly button?: PlayerStatusInfoButton;

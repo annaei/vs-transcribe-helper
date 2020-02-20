@@ -568,7 +568,7 @@ export class StatusBarController implements vscode.Disposable {
                         if (track) {
                             this.player.currentTrack = track;
                             track.time = STATUS.time;
-                            trackButtonText = mplayer_helpers.toStringSafe(STATUS.track.name+" "+mplayer_helpers.secondsToTimestamp(track.time)).trim();
+                            trackButtonText = mplayer_helpers.toStringSafe(STATUS.track.name+" "+mplayer_helpers.secondsToTimestamp(track.time)+" ("+mplayer_helpers.secondsToTimestamp(STATUS.length) +")").trim();
                         }
 
                         if (!mplayer_helpers.isNullOrUndefined(STATUS.isMute)) {
